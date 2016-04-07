@@ -5,23 +5,32 @@
 
 ## Requirements
 
-PHP >= 5.6
+* PHP >= 5.6
 
 ## Changelog
 
 Versioin 0.0.2 [2016-04-07]
-    * add timestamp in log file
+
+* add timestamp in log file
 
 ## How to use
 
 在 Linux OS 中可以通过设置 crontab 来自动运行脚本，下面以 Debian Jessie 示例：
 
-Step 1: 打开 crontab 设置窗口
-    ```
-    crontab -e
-    ```
-Step 2: 追加自动运行示例, 这里设置为每 5 分钟执行一次
-    ```
-    */5 * * * * /usr/local/php/bin/php /script/path/ddns.php >> /script/path/log 2>&1
-    ```
-Step 3: save and exit
+* STEP 1: 打开 crontab 设置窗口
+
+```
+crontab -e
+```
+
+* STEP 2: 追加自动运行示例, 这里设置为每 5 分钟执行一次
+
+```
+*/5 * * * * /usr/local/php/bin/php /script/path/ddns.php >> /script/path/log 2>&1
+```
+
+* STEP 3: Save and Exit
+
+## FAQ
+
+有疑问或发现 bugs，请截图 email(zlyang65@gmail.com), 3X.
