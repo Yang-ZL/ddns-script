@@ -15,11 +15,12 @@
 */
 
 require_once dirname(__file__) . '/func.class.php';
+require_once dirname(__file__) . '/config.php';
 
 date_default_timezone_set('Asia/Shanghai');
 $data = date('[c]');
 
-$ddns = new RPI_DDNS('hooowl.com', 'rpi'); // here is your domain and subdomain which you want to DDNS
+$ddns = new RPI_DDNS(DOMAIN, SUBDOMAIN); // here is your domain and subdomain which you want to DDNS
 
 list($status, $value) = $ddns->getPublicIP();
 if (!$status)

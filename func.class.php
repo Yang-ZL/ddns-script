@@ -1,8 +1,9 @@
 <?php
+require_once dirname(__file__) . '/config.php';
 
 class RPI_DDNS {
     // define loggin_token and packet type
-    private $login_token = ""; // here is your login_tokin(id,token)
+    private $login_token = LOGIN_TOKEN; // here is your login_tokin(id,token)
     private $format      = "json";
     private $domain;
     private $sub_domain;
