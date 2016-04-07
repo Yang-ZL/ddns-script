@@ -19,18 +19,22 @@ Versioin 0.0.2 [2016-04-07]
 
 * STEP 1: 打开 crontab 设置窗口
 
-```
-crontab -e
-```
+    ```
+    crontab -e
+    ```
 
 * STEP 2: 追加自动运行示例, 这里设置为每 5 分钟执行一次
 
-```
-*/5 * * * * /usr/local/php/bin/php /script/path/ddns.php >> /script/path/log 2>&1
-```
+    ```
+    */5 * * * * /usr/local/php/bin/php /script/path/ddns.php >> /script/path/log 2>&1
+    ```
 
 * STEP 3: Save and Exit
 
 ## FAQ
+
+1. Crontab 日志错误 'No MTA installed, discarding output'
+
+    请参考链接 [link](http://askubuntu.com/questions/222512/cron-info-no-mta-installed-discarding-output-error-in-the-syslog)
 
 有疑问或发现 bugs，请截图 email(zlyang65@gmail.com), 3X.
