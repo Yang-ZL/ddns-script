@@ -15,6 +15,8 @@ Versioin 0.0.2 [2016-04-07]
 
 ## How to use
 
+'Git clone' 到有访问权限的文件夹内，并配置 config.php 文件。
+
 在 Linux OS 中可以通过设置 crontab 来自动运行脚本，下面以 Debian Jessie 示例：
 
 * STEP 1: 打开 crontab 设置窗口
@@ -30,6 +32,8 @@ Versioin 0.0.2 [2016-04-07]
     ```
 
 * STEP 3: Save and Exit
+
+PS: 默认要运行本脚本的设备上具有合适版本的 PHP。
 
 ## FAQ
 
