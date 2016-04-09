@@ -8,7 +8,7 @@
 * PHP >= 5.6
 
 ## Changelog
-Versioin 0.1.0 [2016-04-09]
+Versioin 1.0.0 [2016-04-09]
 
 * add log module
 
@@ -36,7 +36,10 @@ Versioin 0.0.2 [2016-04-07]
 
 * STEP 3: Save and Exit
 
-PS: 默认要运行本脚本的设备上具有合适版本的 PHP。
+**NOTICE** 
+
+* 请确保运行脚本的用户对脚本所在文件夹有读写权限。
+* 默认要运行本脚本的设备上具有合适版本的 PHP。
 
 ## FAQ
 

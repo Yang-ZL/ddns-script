@@ -9,9 +9,6 @@
 *   @Author     yang_zl(zlyang65@gmail.com)
 *   @DateTime   2016-04-06 23:10
 *
-*   Versioin 0.1.0 [2016-04-09]
-*       add log module
-*
 */
 
 require_once dirname(__file__) . '/func.class.php';
