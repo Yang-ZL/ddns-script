@@ -26,11 +26,14 @@ class RPI_DDNS {
         // post action and then decode json packet to object
         $response = $this->post($data, $url);
         $response = json_decode($response);
-        // detect the response code 
-        $result[] = $response->code;
-        $result[] = $response->value;
-
-        return $result;
+        // detect the response code
+        // var_dump($response); 
+        if (isset($response->post_errno)) {
+            return $this->post_response(false, $response->post_errno, $response->value);
+        } elseif ($response->code != 1) {
+            return $this->post_response(false, $response->code, $response->value);
+        } else
+            return $this->post_response(true, $response->code, $response->value);
     }
 
     /**
@@ -50,25 +53,18 @@ class RPI_DDNS {
         $response = $this->post($data, $url);
         $response = json_decode($response);
         // var_dump($response);
-        if ($response->status->code != 1) {
-            $result[] = false;
-            $result[] = $response->status->code;
-            $result[] = $response->status->message;
-            return $result;
-        }
+        if (isset($response->post_errno))
+            return $this->post_response(false, $response->post_errno, $response->value);
+
+        if ($response->status->code != 1)
+            return $this->post_response(false, $response->status->code, $response->status->message);
+
         // search ID in the domains part of domain list
-        foreach ($response->domains as $key) {
-            if ($key->name == $this->domain) {
-                $result[] = true;
-                $result[] = $response->status->code;
-                $result[] = $key->id;
-                return $result;
-            }
-        }
-        $result[] = false;
-        $result[] = -1;
-        $result[] = "Your specific <b>domain</b> is not found. Please check it again!";
-        return $result; 
+        foreach ($response->domains as $key)
+            if ($key->name == $this->domain) 
+                return $this->post_response(true, $response->status->code, $key->id);
+
+        return $this->post_response(false, -1, 'Your specific <b>domain</b> is not found. Please check it again!'); 
     }
 
     /**
@@ -90,37 +86,32 @@ class RPI_DDNS {
         $response = $this->post($data, $url);
         $response = json_decode($response);
         // var_dump($response); 
-        if ($response->status->code != 1) {
-            $result[] = false;
-            $result[] = $response->status->code;
-            $result[] = $response->status->message;
-            return $result;
-        }
-        foreach ($response->records as $key) {
+        if (isset($response->post_errno))
+            return $this->post_response(false, $response->post_errno, $response->value);
+
+        if ($response->status->code != 1) 
+            return $this->post_response(false, $response->status->code, $response->status->message);
+
+        foreach ($response->records as $key)
             if ($key->name == $this->sub_domain) {
                 // detect the request type
-                $result[] = true;
-                $result[] = $response->status->code;
                 switch ($type) {
                     case 'ip':
-                        $result[] = $key->value;
+                        $result = $key->value;
                         break;
                     case 'id':
-                        $result[] = $key->id;
+                        $result = $key->id;
                         break;
                     default:
-                        $result[] = "Please select a type to fetch record id or ip.";
+                        $result = "Please select a type to fetch record id or ip.";
                         break;
                 }
-                return $result;
+                return $this->post_response(true, $response->status->code, $result);
             }
-        }
 
-        $result[] = false;
-        $result[] = -1;
-        $result[] = "Your specific <b>sub domain</b> is not found. Please check it again!";
-        return $result; 
+        return $this->post_response(false, -1, 'Your specific <b>sub domain</b> is not found. Please check it again!'); 
     }
+
     /**
     *   Update the specific record ip address (DDNS)
     *
@@ -138,24 +129,20 @@ class RPI_DDNS {
             'record_id'   => $record_id,
             'sub_domain'  => $this->sub_domain,
             'record_line' => "默认",
-            'value' => $ip
+            'value'       => $ip
         );
         $url = 'https://dnsapi.cn/Record.Ddns';
 
         $response = $this->post($data, $url);
         $response = json_decode($response);
         // var_dump($response);
-        if ($response->status->code != 1) {
-            $result[] = false;
-            $result[] = $response->status->code;
-            $result[] = $response->status->message;
-            return $result;
-        }
+        if (isset($response->post_errno))
+            return $this->post_response(false, $response->post_errno, $response->value);
 
-        $result[] = true;
-        $result[] = ' ';
-        $result[] = ' ';
-        return $result;
+        if ($response->status->code != 1) 
+            return $this->post_response(false, $response->status->code, $response->status->message);
+
+        return $this->post_response(true, '', '');
     }
 
     /**
@@ -173,14 +160,32 @@ class RPI_DDNS {
         curl_setopt($handler, CURLOPT_URL, $url);
         // curl_setopt($handler, CURLOPT_HEADER, $header);
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($handler, CURLOPT_TIMEOUT, 60);
+        curl_setopt($handler, CURLOPT_TIMEOUT_MS, 1500);
         curl_setopt($handler, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($handler, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($handler, CURLOPT_POST, 1);
         curl_setopt($handler, CURLOPT_POSTFIELDS, $data);
         $data = curl_exec($handler);
 
+        if ($errno = curl_errno($handler)) {
+            $data_err = array(
+                'post_errno' => $errno,
+                'value'      => curl_error($handler)
+            );
+
+            return json_encode($data_err);
+        }
+
         return $data;
+    }
+
+    private function post_response($status, $code, $value) {
+
+        $result[] = $status;
+        $result[] = $code;
+        $result[] = $value;
+
+        return $result;
     }
 
     public static function send_ms($message) {

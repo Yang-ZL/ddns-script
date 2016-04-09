@@ -22,9 +22,9 @@ $data = date('[c]');
 
 $ddns = new RPI_DDNS(DOMAIN, SUBDOMAIN); // here is your domain and subdomain which you want to DDNS
 
-list($status, $value) = $ddns->getPublicIP();
+list($status, $code, $value) = $ddns->getPublicIP();
 if (!$status)
-    return RPI_DDNS::send_ms("{$data} error code: {$status}, {$value}.\n");
+    return RPI_DDNS::send_ms("{$data} error code: {$code}, {$value}.\n");
 else 
     $curIP = $value;
 
@@ -39,6 +39,7 @@ if (!$status)
     return RPI_DDNS::send_ms("{$data} error code: {$code}, {$value}.\n");
 else
     $recordID = $value;
+
 // var_dump($curIP);
 // var_dump($recordIP);
 
@@ -55,5 +56,5 @@ else {
     if (!$status)
         return RPI_DDNS::send_ms("{$data} error code: {$code}, {$value}.\n");
     else
-        return RPI_DDNS::send_ms("{$data} Success to update IP.");
+        return RPI_DDNS::send_ms("{$data} Success to update IP.\n");
 }
