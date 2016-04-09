@@ -8,6 +8,9 @@
 * PHP >= 5.6
 
 ## Changelog
+Versioin 0.1.0 [2016-04-09]
+
+* add log module
 
 Versioin 0.0.2 [2016-04-07]
 
@@ -28,7 +31,7 @@ Versioin 0.0.2 [2016-04-07]
 * STEP 2: 追加自动运行示例, 这里设置为每 5 分钟执行一次
 
     ```
-    */5 * * * * /usr/local/php/bin/php /script/path/ddns.php >> /script/path/log 2>&1
+    */5 * * * * /usr/local/php/bin/php /script/path/ddns.php 2>&1
     ```
 
 * STEP 3: Save and Exit

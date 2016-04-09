@@ -156,21 +156,21 @@ class RPI_DDNS {
 
         // $header = array('User_Agent' => "RPI Client/1.0.0 (zlyang65@gmail.com)");
 
-        $handler = curl_init();
-        curl_setopt($handler, CURLOPT_URL, $url);
-        // curl_setopt($handler, CURLOPT_HEADER, $header);
-        curl_setopt($handler, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($handler, CURLOPT_TIMEOUT_MS, 1500);
-        curl_setopt($handler, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($handler, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($handler, CURLOPT_POST, 1);
-        curl_setopt($handler, CURLOPT_POSTFIELDS, $data);
-        $data = curl_exec($handler);
+        $handle = curl_init();
+        curl_setopt($handle, CURLOPT_URL, $url);
+        // curl_setopt($handle, CURLOPT_HEADER, $header);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($handle, CURLOPT_TIMEOUT_MS, 1500);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($handle, CURLOPT_POST, 1);
+        curl_setopt($handle, CURLOPT_POSTFIELDS, $data);
+        $data = curl_exec($handle);
 
-        if ($errno = curl_errno($handler)) {
+        if ($errno = curl_errno($handle)) {
             $data_err = array(
                 'post_errno' => $errno,
-                'value'      => curl_error($handler)
+                'value'      => curl_error($handle)
             );
 
             return json_encode($data_err);
@@ -190,5 +190,11 @@ class RPI_DDNS {
 
     public static function send_ms($message) {
         echo $message;
+    }
+
+    public function updateLog($value) {
+        $handle = fopen(dirname(__file__) . '/log', 'a');
+        fwrite($handle, $value);
+        fclose($handle);
     }
 }

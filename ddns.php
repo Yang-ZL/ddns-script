@@ -9,8 +9,8 @@
 *   @Author     yang_zl(zlyang65@gmail.com)
 *   @DateTime   2016-04-06 23:10
 *
-*   Versioin 0.0.2 [2016-04-07]
-*       add timestamp in log file
+*   Versioin 0.1.0 [2016-04-09]
+*       add log module
 *
 */
 
@@ -24,19 +24,19 @@ $ddns = new RPI_DDNS(DOMAIN, SUBDOMAIN); // here is your domain and subdomain wh
 
 list($status, $code, $value) = $ddns->getPublicIP();
 if (!$status)
-    return RPI_DDNS::send_ms("{$data} error code: {$code}, {$value}.\n");
+    return $ddns->updateLog("{$data} error code: {$code}, {$value}.\n");
 else 
     $curIP = $value;
 
 list($status, $code, $value) = $ddns->getDomainID();
 if (!$status) 
-    return RPI_DDNS::send_ms("{$data} error code: {$code}, {$value}.\n");
+    return $ddns->updateLog("{$data} error code: {$code}, {$value}.\n");
 else
     $domainID = $value;
 
 list($status, $code, $value) = $ddns->getOneRecord($domainID);
 if (!$status)
-    return RPI_DDNS::send_ms("{$data} error code: {$code}, {$value}.\n");
+    return $ddns->updateLog("{$data} error code: {$code}, {$value}.\n");
 else
     $recordID = $value;
 
@@ -45,16 +45,16 @@ else
 
 list($status, $code, $value) = $ddns->getOneRecord($domainID, 'ip');
 if (!$status)
-    return RPI_DDNS::send_ms("{$data} error code: {$code}, {$value}.\n");
+    return $ddns->updateLog("{$data} error code: {$code}, {$value}.\n");
 else
     $recordIP = $value;
 
 if (strcmp($curIP, $recordIP) == 0) 
-    return RPI_DDNS::send_ms("{$data} No need to update, current public ip is {$recordIP}.\n");
+    return $ddns->updateLog("{$data} No need to update, current public ip is {$recordIP}.\n");
 else {
     list($status, $code, $value) = $ddns->updateIP($domainID, $recordID, $curIP);
     if (!$status)
-        return RPI_DDNS::send_ms("{$data} error code: {$code}, {$value}.\n");
+        return $ddns->updateLog("{$data} error code: {$code}, {$value}.\n");
     else
-        return RPI_DDNS::send_ms("{$data} Success to update IP.\n");
+        return $ddns->updateLog("{$data} Success to update IP.\n");
 }
