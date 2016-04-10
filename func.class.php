@@ -160,7 +160,9 @@ class RPI_DDNS {
         curl_setopt($handle, CURLOPT_URL, $url);
         // curl_setopt($handle, CURLOPT_HEADER, $header);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($handle, CURLOPT_TIMEOUT_MS, 1500);
+        // curl_setopt($handle, CURLOPT_NOSIGNAL, 1);
+        // curl_setopt($handle, CURLOPT_TIMEOUT_MS, 1500);
+        curl_setopt($handle, CURLOPT_TIMEOUT, 60);
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($handle, CURLOPT_POST, 1);
@@ -178,7 +180,14 @@ class RPI_DDNS {
 
         return $data;
     }
-
+    /**
+    *   Uniformity the post response data
+    *
+    *   @param $status - the status of post request
+    *   @param $code - the error number (0, if request success)
+    *   @param $value - the error info (the expected data if request success.)
+    *   @return the formal response data
+    */
     private function post_response($status, $code, $value) {
 
         $result[] = $status;
@@ -191,7 +200,12 @@ class RPI_DDNS {
     public static function send_ms($message) {
         echo $message;
     }
-
+    /**
+    *   Write data into log file
+    *
+    *   @param $value - the data which need to be writed into log file.
+    *   @return none
+    */
     public function updateLog($value) {
         $handle = fopen(dirname(__file__) . '/log', 'a');
         fwrite($handle, $value);
